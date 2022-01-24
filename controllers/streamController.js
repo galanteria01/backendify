@@ -1,4 +1,4 @@
-const fs = require('fs');
+import { statSync, createReadStream } from 'fs';
 
 const playVideo = async (req, res) => {
 
@@ -8,7 +8,7 @@ const playVideo = async (req, res) => {
   }
 
   const videoPath = path.join(__dirname, '../assets/videos/test.mp4');
-  const stat = fs.statSync(videoPath);
+  const stat = statSync(videoPath);
 
   const CHUNK_SIZE = 10 ** 6;
   const total = stat.size;
@@ -24,7 +24,7 @@ const playVideo = async (req, res) => {
   }
 
   res.writeHead(206, headers);
-  const stream = fs.createReadStream(videoPath, { start, end });
+  const stream = createReadStream(videoPath, { start, end });
   stream.pipe(res);
 
 }
@@ -37,7 +37,7 @@ const playAudio = async (req, res) => {
   }
 
   const audioPath = path.join(__dirname, '../assets/audios/test.mp3');
-  const stat = fs.statSync(audioPath);
+  const stat = statSync(audioPath);
 
   const CHUNK_SIZE = 10 ** 6;
   const total = stat.size;
@@ -53,12 +53,12 @@ const playAudio = async (req, res) => {
   }
 
   res.writeHead(206, headers);
-  const stream = fs.createReadStream(audioPath, { start, end });
+  const stream = createReadStream(audioPath, { start, end });
   stream.pipe(res);
 
 }
 
-module.exports = {
+export {
   playVideo,
   playAudio
 }

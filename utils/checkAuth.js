@@ -1,4 +1,4 @@
-module.exports = (context) => {
+export default (context) => {
   const authHeader = context.req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split("Bearer ")[1];

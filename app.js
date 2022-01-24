@@ -1,12 +1,14 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express, { json, urlencoded } from 'express';
+import { config } from 'dotenv';
+import authRouter from './routes/auth.js';
+import streamRouter from './routes/stream.js';
+import { createServer } from 'http'
+import { Server } from 'socket.io'
+import mongoose from 'mongoose';
 const app = express();
-const authRouter = require('./routes/auth');
-const streamRouter = require('./routes/stream');
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const mongoose = require('mongoose');
-dotenv.config();
+const server = createServer(app);
+const io = new Server(server);
+config();
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -21,7 +23,7 @@ db.once("open", function () {
   });
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(json());
+app.use(urlencoded({ extended: false }));
 app.use('/auth', authRouter);
 app.use('/stream', streamRouter)

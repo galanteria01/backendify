@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const { validateRegisterInput, validateLoginInput } = require("../utils/validators");
-const jwt = require('jsonwebtoken');
+import bcrypt from "bcryptjs";
+import User from "../models/User.js";
+import { validateRegisterInput, validateLoginInput } from "../utils/validators.js";
+import jwt from 'jsonwebtoken';
 
 const generateJwt = (user) => {
   return jwt.sign({
@@ -21,7 +21,7 @@ const signup = async (req, res, next) => {
     console.log(errors)
     throw new Error("Authentication failed");
   };
-  const user = await User.findOne({ email });
+  const user = await findOne({ email });
   if (user) {
     throw new Error("User already exists");
   }
@@ -56,7 +56,7 @@ const login = async (req, res, next) => {
 
   if (!valid) throw new Error(errors);
 
-  const user = await User.findOne({ email });
+  const user = await findOne({ email });
 
   if (!user) {
     errors.user = "User not found";
@@ -81,7 +81,7 @@ const login = async (req, res, next) => {
   });
 }
 
-module.exports = {
+export {
   signup,
   login
 }

@@ -1,8 +1,8 @@
-const express = require('express');
-const { playVideo, playAudio } = require('../controllers/streamController');
-const router = express.Router();
+import { Router } from 'express';
+import { playVideo, playAudio } from '../controllers/streamController.js';
+const router = Router();
 
-app.get("/video", playVideo);
-app.get("/audio", playAudio);
+router.get("/video", playVideo);
+router.get("/audio", playAudio);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const validator = require("email-validator");
+import { validate } from "email-validator";
 
 const isEmpty = (err) => {
   return Object.keys(err).length === 0;
@@ -9,7 +9,7 @@ const validateLoginInput = (data) => {
 
   if (!data.email) {
     errors.email = 'Email is required';
-  } else if (!validator.validate(data.email)) {
+  } else if (!validate(data.email)) {
     errors.email = 'Email is invalid';
   }
 
@@ -28,7 +28,7 @@ const validateRegisterInput = (data) => {
 
   if (!data.email) {
     errors.email = 'Email is required';
-  } else if (!validator.validate(data.email)) {
+  } else if (!validate(data.email)) {
     errors.email = 'Email is invalid';
   }
 
@@ -50,7 +50,4 @@ const validateRegisterInput = (data) => {
   };
 }
 
-module.exports = {
-  validateLoginInput,
-  validateRegisterInput
-}
+export { validateLoginInput, validateRegisterInput };
