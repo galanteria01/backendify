@@ -9,7 +9,7 @@ const generateJwt = (user) => {
     email: user.email,
     name: user.name
   }, process.env.SECRET_TOKEN, {
-    expiresIn: "1h"
+    expiresIn: "24h"
   });
 }
 
@@ -18,12 +18,18 @@ const signup = async (req, res, next) => {
   const { username, email, password, cPassword } = req.body;
   const { errors, valid } = validateRegisterInput({ username, email, password, cPassword });
   if (!valid) {
-    console.log(errors)
-    throw new Error("Authentication failed");
+    res.json({
+      status: 403,
+      errors
+    })
   };
   const user = await findOne({ email });
   if (user) {
-    throw new Error("User already exists");
+    errors.user = "User already exists"
+    res.json({
+      status: 403,
+      errors
+    })
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -39,6 +45,7 @@ const signup = async (req, res, next) => {
   const token = generateJwt(response);
 
   res.json({
+    status: 200,
     token,
     user: {
       id: response.id,
@@ -60,18 +67,26 @@ const login = async (req, res, next) => {
 
   if (!user) {
     errors.user = "User not found";
-    throw new Error("User doesn't exist");
+    res.json({
+      status: 404,
+      errors
+    })
   }
 
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
-    throw new Error("Password doesn't match");
+    errors.match = "Password doesn't match"
+    res.json({
+      status: 403,
+      errors
+    })
   }
 
   const token = generateJwt(user);
 
   res.json({
+    status: 200,
     token,
     user: {
       id: user.id,

@@ -37,11 +37,11 @@ const validateRegisterInput = (data) => {
   }
 
   if (!data.cPassword) {
-    errors.password2 = 'Confirm Password is required';
+    errors.confirmPassword = 'Confirm Password is required';
   }
 
   if (data.password !== data.cPassword) {
-    errors.password2 = 'Passwords must match';
+    errors.confirmPassword = 'Passwords must match';
   }
 
   return {
